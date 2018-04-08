@@ -1,0 +1,65 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+		<meta charset="utf-8" />
+		<title>Drag Events</title>
+		<script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+		<script src="https://sdk.altvr.com/libs/altspace.js/2.9.0/altspace.min.js"></script>
+		<script>
+			AFRAME.registerComponent('foo', {
+						
+		  init: function () {
+			//var the_enclosure;	
+	
+			//Get the enclosure
+			//altspace.getEnclosure().then(function(e) {
+				//enclosure = e;
+				//the_enclosure = enclosure;
+			//console.log(enclosure.innerWidth);
+			//});
+			//console.log(the_enclosure);
+	
+			var scene = this.el.sceneEl.object3D;  // THREE.Scene
+			var cube = document.querySelector('#thetest').getObject3D('mesh'); 
+			console.log(cube);
+			  //Add behaviors
+			  cube.addBehaviors(
+				//new altspace.utilities.behaviors.Object3DSync({position: true}),
+				new altspace.utilities.behaviors.Drag({
+						//Limit drag to within bounds of the enclosure
+						x: { min: (1500 / 3) * -1, max: (1500 / 3)},
+						z: { min: (1500 / 3) * -1, max: (1500 / 3)}
+	
+				})
+			);
+				//Add event listeners
+				cube.addEventListener('dragstart', function (data) {
+					cube.material.color.setStyle('blue');
+				});
+				//Add 'Drag Stop' event listener
+				cube.addEventListener('dragstop', function (data) {
+					cube.material.color.setStyle('red');
+				});
+		  },
+		  tick: function(){
+			var cube = document.querySelector('#thetest').getObject3D('mesh'); 
+			var thecyl = document.querySelector('#thecyl').getObject3D('mesh'); 
+			thecyl.position.x = (cube.position.x * 1);
+			thecyl.position.z = (cube.position.z * 1);
+			
+			//console.log(thecyl.position);
+		  }
+		});
+			</script>
+			
+	</head>
+	<body class="a-body "> 
+		<a-scene altspace="verticalAlign:bottom" class="fullscreen" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="">
+				<a-entity id="master">
+						<a-entity position="0 0.553 0" scale="2.329 0.462 2.329" geometry="" material="color:yellow" id="ring_floor"></a-entity>
+						<a-entity geometry="depth:0.3;height:0.3;width:0.3" material="color:#C03546" position="-0.094 0.67 1.798" foo="" id="thetest" name="mybox" scale="0.381 0.381 0.381"></a-entity>
+						<a-entity geometry="primitive:cylinder;height:0.3;radius:0.3" material="color:purple" position="0.14 0.8 0.231" id="thecyl" scale="0.607 0.607 0.607"></a-entity>
+					</a-entity>
+		</a-scene>
+	
+	
+	
+	</body></html>
